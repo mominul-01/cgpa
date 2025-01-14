@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Calculate = () => {
   const [grades, setGrades] = useState(Array(4).fill(""));
@@ -33,11 +35,29 @@ const Calculate = () => {
       (acc, grade) => acc + gradeToPoint[grade],
       0
     );
-    setGpa((totalPoints / grades.length).toFixed(2));
+    const calculatedGpa = (totalPoints / grades.length).toFixed(2);
+    setGpa(calculatedGpa);
+    showToastMessage(calculatedGpa);
+  };
+
+  const showToastMessage = (gpa) => {
+    let message;
+    if (gpa >= 4.0) message = "Outstanding! 🌟";
+    else if (gpa >= 3.75) message = "Excellent work! 😃";
+    else if (gpa >= 3.5) message = "Well done! 🤗";
+    else if (gpa >= 3.25) message = "Good job! 😊";
+    else if (gpa >= 3.0) message = "Nice effort! 👍";
+    else if (gpa >= 2.75) message = "Keep improving! 💪";
+    else if (gpa >= 2.5) message = "Do better next time! 😔";
+    else if (gpa >= 2.25) message = "Don't give up! 🙁";
+    else if (gpa >= 2.0) message = "Needs more effort! 😢";
+    else message = "Try harder! 😞";
+
+    toast(`Result CGPA: ${gpa}\n${message}`);
   };
 
   return (
-    <div className="container p-4 pb-32 mx-auto ">
+    <div className="container p-4 pb-32 mx-auto">
       {/* Grade Table */}
       <div className="w-full mb-8 sm:mb-12 sm:mr-5 sm:float-left sm:w-auto">
         <table className="w-full border border-collapse border-gray-400 table-auto sm:w-48">
@@ -113,8 +133,14 @@ const Calculate = () => {
           Calculate CGPA
         </button>
         <span className="text-black">------------</span>
-        {gpa && <h2 className="text-2xl text-black">Result CGPA: {gpa}</h2>}
+        {gpa && (
+          <div className="text-center">
+            <h2 className="text-2xl text-black">Result CGPA: {gpa}</h2>
+          </div>
+        )}
       </div>
+
+      <ToastContainer />
     </div>
   );
 };
